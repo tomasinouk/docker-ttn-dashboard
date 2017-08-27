@@ -18,8 +18,17 @@ if [ -z "$DOMAINS" ]; then
 	exit 3
 fi
 
+if [ -z "$CERTBOT_EMAIL" ]; then
+	echo "You must set CERTBOT_EMAIL to an email address useful to certbot/letsencrypt for notifications"
+	exit 3
+fi
+
 # run cerbot to set up apache
+<<<<<<< HEAD
 certbot --non-interactive --domains "$DOMAINS" --apache --agree-tos --rsa-key-size 4096 --redirect || exit 4
+=======
+certbot --agree-tos --email "${CERTBOT_EMAIL}" --non-interactive --domains "$CERTBOT_DOMAINS" --apache --agree-tos --rsa-key-size 4096 --redirect || exit 4
+>>>>>>> b4fe947e6fa9f3957c2d96aa07cf841b36750b62
 
 # certbot actually launched apache. The simple hack is to stop it; then launch 
 # it again after we've edited the config files.
