@@ -13,13 +13,13 @@ if [ -f certbot-config.sh ]; then
 	source certbot-config.sh
 fi
 
-if [ -z "$CERTBOT_DOMAINS" ]; then
-	echo "You must set CERTBOT_DOMAINS to value to be passed to certbot for --domains" 
+if [ -z "$DOMAINS" ]; then
+	echo "You must set DOMAINS to value to be passed to certbot for --domains" 
 	exit 3
 fi
 
 # run cerbot to set up apache
-certbot --non-interactive --domains "$CERTBOT_DOMAINS" --apache --agree-tos --rsa-key-size 4096 --redirect || exit 4
+certbot --non-interactive --domains "$DOMAINS" --apache --agree-tos --rsa-key-size 4096 --redirect || exit 4
 
 # certbot actually launched apache. The simple hack is to stop it; then launch 
 # it again after we've edited the config files.
