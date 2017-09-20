@@ -1,2 +1,3 @@
+# rename this file .env and change password
 GF_SECURITY_ADMIN_PASSWORD=ejdhbM93
 GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/

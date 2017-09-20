@@ -1,2 +1,3 @@
+# rename this file .env and change password
 INFLUXDB_INIT_PWD=3zaj3zQx
 PRE_CREATE_DB=demo
