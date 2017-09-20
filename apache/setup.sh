@@ -13,7 +13,7 @@ if [ -f certbot-config.sh ]; then
 	source certbot-config.sh
 fi
 
-if [ -z "$DOMAINS" ]; then
+if [ -z "$CERTBOT_DOMAINS" ]; then
 	echo "You must set DOMAINS to value to be passed to certbot for --domains" 
 	exit 3
 fi
