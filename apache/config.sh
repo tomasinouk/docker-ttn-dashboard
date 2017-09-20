@@ -1,3 +1,3 @@
 # change this to the actual FQDN(s) of the server
-CERTBOT_DOMAINS="ttn.tickingtocking.com"
-CERTBOT_EMAIL="mimiflynn@gmail.com"
+export CERTBOT_DOMAINS="ttn.tickingtocking.com"
+export CERTBOT_EMAIL="mimiflynn@gmail.com"
