@@ -12,26 +12,16 @@ This example uses [docker-compose](https://docs.docker.com/compose/overview/) to
 4. An instance of [Grafana](http://grafana.org/), which gives a web-based dashboard interface to the data.
 
 To make things more specific, most of the description here assumes use of Microsoft Azure. However, I have tested this on Ubuntu 16 LTS without difficulty (apart from the additional complexity of setting up `apt-get` to fetch docker, and the need for a manual install of `docker-compose`), and on DreamCompute. I belive that this will work on any Linux or Linux-like platform that supports docker, docker-compose, and node-red. It's likely to run on a Raspberry Pi 2, and it might even run on a C.H.I.P. computer... but as of this writing, this has not been tested.
-<<<<<<< HEAD
-=======
 
 ## Definitions
 * The **host system** is the system running Docker and Docker-compose.
 * A **container** is one of the virtual systems running under Docker on the host system.
 * A **file on the host** is a file on the host system (typically not visible from within the container(s).
 * A **file in container *X*** (or a **file in the *X* container**) is a file in a filesystem associated with containser *X* (and typically not visible from the host system).
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 
 ## Security
 All communication with the Apache server are encrypted using SSL with auto-provisioned certificates from Let's Encrypt. Grafana is the primary point of access for most users, and Grafana's login is used for that purpose. 
 
-<<<<<<< HEAD
-Access to Node-RED and InfluxDB is via special URLs (__base__/node-red and __base__/influxdb). These URLs are protected via Apache `htpasswd` and `htgroup` file entries. These entries must be manually edited by an administrator.
-
-The initial administrator's login key for grafana must be initialized prior to starting; it's stored in `grafana/.env`.
-
-Microsoft Azure, by default, will not open any of the ports to the outside world, so you will need to open port 443 for SSL access to Apache. If you want to use the influxdb API remotely, you'll also need to open port 8083.
-=======
 Access to Node-RED and InfluxDB is via special URLs (__base__/node-red/ and __base__/influxdb/, where __base__ is the URL served by the Apache container). These URLs are protected via Apache `htpasswd` and `htgroup` file entries. These entries are files in the Apache container, and must be manually edited by an administrator.
 
 The initial administrator's login password for grafana must be initialized prior to starting the very first; it's stored in `grafana/.env`. (When you start the grafana container the first time, it creates `grafana.db` in the grafana container, and stores the password at that time. If `grafana.db` already exists, the password in `grafana/.env` is ignored.)
@@ -39,7 +29,6 @@ The initial administrator's login password for grafana must be initialized prior
 Microsoft Azure, by default, will not open any of the ports to the outside world, so you will need to open port 443 for SSL access to Apache. If you want to use the influxdb API remotely, you'll also need to open port 8083.
 
 For concreteness, the following table assumes that __base__ is `server.example.com`.
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 
 To access | Open this link | Notes
 ----------|----------------|--------
@@ -53,19 +42,11 @@ This can be visualized as below:
 
 ## Assumptions
 
-<<<<<<< HEAD
-* You must have docker-compose 1.9 or later (for which see https://github.com/docker-compose -- be aware that apt-get normally doesn't grab this; if configured at all, it frequently gets an out-of-date version).
-* The environment variable `TTN_DASHBOARD_DATA`, if set, points to the common directory for your data.
-* `${TTN_DASHBOARD_DATA}/var/lib/node-red` will have your local Node-RED data.
-* `${TTN_DASHBOARD_DATA}/var/lib/influxdb` will have your local influxdb data (this is what you should back up)
-* `${TTN_DASHBOARD_DATA}/var/lib/grafana` will have your dashboards
-=======
 * Your host system must have docker-compose 1.9 or later (for which see https://github.com/docker-compose -- be aware that apt-get normally doesn't grab this; if configured at all, it frequently gets an out-of-date version).
 * The environment variable `TTN_DASHBOARD_DATA`, if set, points to the common directory for your data. If not set, docker-compose will quit at startup. (This is by design!) 
    * `${TTN_DASHBOARD_DATA}node-red` will have your local Node-RED data.
    * `${TTN_DASHBOARD_DATA}influxdb` will have your local influxdb data (this is what you should back up)
    * `${TTN_DASHBOARD_DATA}grafana` will have your dashboards
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 
 ## Composition and External Ports
 
@@ -83,18 +64,6 @@ Remember, if your server is running on a cloud platform like Microsoft Azure or 
 
 1. Make sure your server has `git`, `docker` and `docker-compose` installed, with the versions mentioned above under **Assumptions**.
 2. Use `git clone` to copy this repository to your host.
-<<<<<<< HEAD
-3. Define root URL and passwords in `grafana/.env` and `influxdb/.env`
-4. Optional, but important for consistency:
-  `% export TTN_DASHBOARD_DATA=/full/path/to/directory`
-  This will put all the data file for this instance as subdirectories of the specified path. If you leave this underfined, `docker-compose` will print error messages and then put your data in `/var/lib/node-red`, etc.
-5. `% docker-compose build`
-   * If this fails with the message, `ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?`, then probably your user ID is not in the `docker` group. To fix this, `sudo adduser MYUSER docker`, where "MYUSER" is your login ID. Then (**very important**) log out and log back in.
-6. `% docker-compose up`
-   * If this fails (for example, Node-RED dies with a "killed" status), confirm taht you have a directory named `/var/lib/node-red`, that it's owned by root, and that it has typical directory permissions.
-6. Open Node-RED on **http://machine.example.net:1880** (or, if using the above SSH mappings, **[http://localhost:11880](http://localhost:11880)**) and build a flow that stores data in InfluxDB
-7. Open Grafana on **http://machine.example.net** (or, if using the above SSH mappings, **[http://localhost:10080](http://localhost:10080)**), and build a dashboard that retrieves data from InfluxDB
-=======
 3. Create a `.env` file in your repository with the following settings:
    1. `TTN_DASHBOARD_DATA=/full/path/to/directory/` 
    The trailing slash is required!
@@ -125,7 +94,6 @@ Your `.env` file should look like this:
    * If this fails (for example, Node-RED dies with a "killed" status), check your `.env` file.
 7. Open Grafana on **https://myhost.example.com**, and log in as admin. Change your password. Set up your first data source using InfluxDB. See below for more detailed instructions.
 8. Open Node-RED on **https://myhost.example.com/node-red/**,  and build a flow that stores data in InfluxDB.  **Be sure to add the trailing slash! Otherwise you'll get a 404 from Grafana. We'll fix this soon.**
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 
 ## Data Files
 
@@ -135,19 +103,11 @@ Data files are kept in the following locations by default.
 
 Component | Data file location on host | Location in container
 ----------|----------------------------|----------------------
-<<<<<<< HEAD
-Node-RED | `${TTN_DASHBOARD_DATA}/var/lib/node-red` | `/data`
-InfluxDB | `${TTN_DASHBOARD_DATA}/var/lib/influxdb`| `/data`
-Grafana | `${TTN_DASHBOARD_DATA}/var/lib/grafana`| `/var/lib/grafana`
-
-As shown, you can quickly override the default locations on the **host** (e.g. for testing). You do this by setting the environment variable `TTN_DASHBOARD_DATA` to the **absolute path** to the containing directory prior to calling `docker-compose up`. The above paths are appended to the value of `TTN_DASHBOARD_DATA`. Directories are created as needed. Consider the following example:
-=======
 Node-RED | `${TTN_DASHBOARD_DATA}node-red` | `/data`
 InfluxDB | `${TTN_DASHBOARD_DATA}influxdb`| `/data`
 Grafana | `${TTN_DASHBOARD_DATA}grafana`| `/var/lib/grafana`
 
 As shown, you can easily change locations on the **host** (e.g. for testing). You do this by setting the environment variable `TTN_DASHBOARD_DATA` to the **absolute path** to the containing directory prior to calling `docker-compose up`. The above paths are appended to the value of `TTN_DASHBOARD_DATA`. Directories are created as needed. Consider the following example:
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 ```bash
 % export TTN_DASHBOARD_DATA=/dashboard-data/
 % docker-compose up -d
@@ -167,15 +127,9 @@ don't remove the files between runs, your data will preserved.
 Sometimes this is inconvienient, and you'll want to remove some or all of the
 data. For a variety of reasons, the data files and directories are created owned by root, so you must use the `sudo` command to remove the data files. Here's an example of how to do it:
 ```bash
-<<<<<<< HEAD
-% sudo rm -rf ${TTN_DASHBOARD_DATA}/var/lib/node-red
-% sudo rm -rf ${TTN_DASHBOARD_DATA}/var/lib/influxdb
-% sudo rm -rf ${TTN_DASHBOARD_DATA}/var/lib/grafana
-=======
 % sudo rm -rf ${TTN_DASHBOARD_DATA}node-red
 % sudo rm -rf ${TTN_DASHBOARD_DATA}influxdb
 % sudo rm -rf ${TTN_DASHBOARD_DATA}grafana
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 ```
 
 ## Node-RED and Grafana Examples
@@ -191,30 +145,17 @@ There is one point that is somewhat confusing about the connections from Node-RE
 
 ### Data source settings in Grafana
 * Set the URL (under Http Settings) to `http://influxdb:8086`.
-<<<<<<< HEAD
-* Select the database. There's a default database called "demo", which is always created. (This is determined by the file `influxdb/.env`.)
-=======
 * Select the database. There's a default database called "demo", which is always created. (This is determined by the file `influxdb/.env`; if you change that file, you can rename the default database.)
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 * Leave user and password blank.
 * Click "Save & Test".
 
 ## Future work
-<<<<<<< HEAD
-This code is not yet on the main branch because of the following remaining work items (see TODO.txt):
-1. add a script to setup the passwords initially for grafana and for access to node-red and influxdb.
-2. admin script to show roles and maintain the htpasswd 
-3. add the auto-update cron script -- right now you have to restart in order to get the SSL certs updated. Not a big deal, as the patches-requiring-reboot interval is shorter than the life of the certs, but still, this should be fixed.
-4. Switch to [phusion](https://github.com/phusion/baseimage-docker) for the base inmage, instead of ubuntu.
-5. add a safety check, so that a manual launch without running the configuration script will cause things to display a useful message and shut down. At that point, we can make `TTN_DASHBOARD_DATA` mandatory, and set it to `/var/lib` by default.
-=======
 Although the dashboard is already very useful, it's incomplete.  Please refer to `TODO.md`, and also note that we're considering the following. Check in for updates!
 
 1. add a script to setup the passwords initially for grafana and for access to node-red and influxdb.
 2. admin script to show roles and maintain the htpasswd 
 3. add the auto-update cron script -- right now you have to restart in order to get the SSL certs updated. Not a big deal, as the patches-requiring-reboot interval is shorter than the life of the certs, but still, this should be fixed.
 4. Switch to [phusion](https://github.com/phusion/baseimage-docker) for the base image, instead of ubuntu.
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 6. providue suitable intial files for Grafana and NodeRed, assuming Catena-4450 sensor node.
 7. the intial script should prompt for the data base name.
 

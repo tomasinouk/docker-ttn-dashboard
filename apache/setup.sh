@@ -44,13 +44,6 @@ if [ -z "$APACHE_FQDN" -o "$APACHE_FQDN" = "." ]; then
 fi
 
 # run cerbot to set up apache
-<<<<<<< HEAD
-certbot --agree-tos --email "${CERTBOT_EMAIL}" --non-interactive --domains "${CERTBOT_DOMAINS}" --apache --agree-tos --rsa-key-size 4096 --redirect || exit 4
-
-# certbot actually launched apache. The simple hack is to stop it; then launch 
-# it again after we've edited the config files.
-/usr/sbin/apache2ctl stop
-=======
 if [ "$CERTBOT_TEST" != "test" ]; then
     certbot --agree-tos --email "${CERTBOT_EMAIL}" --non-interactive --domains "$CERTBOT_DOMAINS" --apache --agree-tos --rsa-key-size 4096 --redirect || exit 4
 
@@ -58,17 +51,12 @@ if [ "$CERTBOT_TEST" != "test" ]; then
     # it again after we've edited the config files.
     /usr/sbin/apache2ctl stop
 fi
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 
 # now, add the fields to the virtual host section for https.
 set -- proxy-*.conf
 if [ "$1" != "proxy-*.conf" ] ; then
 	echo "add proxy-specs to configuration from:" "$@"
-<<<<<<< HEAD
-	cat "$@" > /tmp/proxyspecs.conf || exit 5
-=======
 	sed -e "s/@{FQDN}/${APACHE_FQDN}/g" "$@" > /tmp/proxyspecs.conf || exit 5
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 	sed -e '/^ServerName/r/tmp/proxyspecs.conf' /etc/apache2/sites-available/000-default-le-ssl.conf > /tmp/000-default-le-ssl-local.conf || exit 6
 	mv /tmp/000-default-le-ssl-local.conf /etc/apache2/sites-available || exit 7
 	echo "enable the modified site, and disable the ssl defaults"
@@ -77,12 +65,7 @@ if [ "$1" != "proxy-*.conf" ] ; then
 fi
 
 # launch apache
-<<<<<<< HEAD
-echo "launch apache"
-exec /usr/sbin/apache2ctl -DFOREGROUND
-=======
 if [ "$APACHE_TEST" != "test" ]; then
     echo "launch apache"
     exec /usr/sbin/apache2ctl -DFOREGROUND
 fi
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519

@@ -116,11 +116,7 @@ services:
     build: node-red
     user: "root"
     volumes:
-<<<<<<< HEAD
-      - "${TTN_DASHBOARD_DATA}/var/lib/node-red:/data"
-=======
       - "${TTN_DASHBOARD_DATA}node-red:/data"
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
     # nodered opens ports on influxdb so it needs to be able to talk to it.
     links:
       - influxdb
@@ -129,25 +125,15 @@ services:
     restart: unless-stopped
     image: influxdb:1.2.4
     volumes:
-<<<<<<< HEAD
-      - "${TTN_DASHBOARD_DATA}/var/lib/influxdb:/data"
-=======
       - "${TTN_DASHBOARD_DATA}influxdb:/var/lib/influxdb"
     environment:
       INFLUXDB_INIT_PWD: "${TTN_DASHBOARD_INFLUXDB_ADMIN_PASSWORD:-!notset}"
       PRE_CREATE_DB: "${TTN_DASHBOARD_INFLUXDB_INITIAL_DATABASE_NAME:-demo}"
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
 
   grafana:
     restart: unless-stopped
     image: grafana/grafana:4.3.2
     volumes:
-<<<<<<< HEAD
-      - "${TTN_DASHBOARD_DATA}/var/lib/grafana:/var/lib/grafana"
-    # grafana opens ports on influxdb, so it needs to be able to talk to it.
-    links:
-      - influxdb
-=======
       - "${TTN_DASHBOARD_DATA}grafana:/var/lib/grafana"
     environment:
       GF_SECURITY_ADMIN_PASSWORD: "${TTN_DASHBOARD_GRAFANA_ADMIN_PASSWORD:-!notset}"
@@ -165,4 +151,3 @@ services:
       - influxdb
 
 ### end of file ###
->>>>>>> c496789b3e316deb73b52c5c46e8b3ffa4000519
