@@ -1,3 +1,2 @@
-node-red/data
-.env
 *.swp
+.env
