@@ -123,7 +123,7 @@ services:
 
   influxdb:
     restart: unless-stopped
-    image: influxdb:1.2.4
+    image: influxdb
     volumes:
       - "${TTN_DASHBOARD_DATA}influxdb:/var/lib/influxdb"
     environment:
@@ -132,7 +132,7 @@ services:
 
   grafana:
     restart: unless-stopped
-    image: grafana/grafana:4.3.2
+    image: grafana/grafana
     volumes:
       - "${TTN_DASHBOARD_DATA}grafana:/var/lib/grafana"
     environment:
